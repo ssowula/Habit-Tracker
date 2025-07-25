@@ -1,0 +1,41 @@
+## Build results
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.app
+*.pdb
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider / VS Code / JetBrains
+.vscode/
+.idea/
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Entity Framework
+Migrations/
+
+## Dotnet Secrets
+secrets.json
+
+## Databases
+*.db
+*.mdf
+*.ldf
+
+## Logs
+*.log
+
+## Others
+*.swp
+*.bak
+*.tmp
