@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from . import schemas,dependencies,crud,security
+from . import schemas,dependencies,crud,security,models
+from .database import engine
 
+models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 @app.post("/register",response_model=schemas.User, status_code=status.HTTP_201_CREATED)
