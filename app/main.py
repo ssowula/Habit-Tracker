@@ -22,5 +22,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
             detail="Niepoprawna nazwa użytkownika lub hasło",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = f"{db_user.username}_fake_token"
-    return {"access_token": access_token, "token_type": "bearer"}
+    token = security.create_access_token(
+        {"sub": form_data.username}
+    )
+    return {"access_token": token, "token_type": "bearer"}
