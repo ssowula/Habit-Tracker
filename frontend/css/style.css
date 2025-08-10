@@ -32,7 +32,7 @@ label {
     margin-bottom: 5px;
     font-weight: bold;
 }
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"],#habitFrequency {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
