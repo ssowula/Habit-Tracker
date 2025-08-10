@@ -185,3 +185,9 @@ document.addEventListener('click', function(event) {
         console.log(`Nawyk o ID: ${habitId} został zaznaczony jako: ${isChecked}`);
     }
 });
+function goToHabitsDashboard(){
+    window.location.href='HabitsDashboard.html';
+}
+function goToHabitsToday(){
+window.location.href='HabitsToday.html';
+}
