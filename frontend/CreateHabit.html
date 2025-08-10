@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje Nawyki - Habit Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Dodaj nowy nawyk</h2>
+            <form id="addHabitForm">
+                <div class="form-group">
+                    <label for="habitName">Nazwa nawyku</label>
+                    <input type="text" id="habitName" placeholder="Np. Czytanie książki" required>
+                </div>
+                <div class="form-group">
+                    <label for="habitFrequency">Częstotliwość</label>
+                    <select id="habitFrequency" required>
+                        <option value="codziennie">Codziennie</option>
+                        <option value="co tydzien">Co tydzień</option>
+                        <option value="co miesiac">Co miesiąc</option>
+                    </select>
+                </div>
+                <button type="submit">Dodaj nawyk</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Moje nawyki</h2>
+            <table class="habits-table">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Częstotliwość</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="habits-list">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="response" class="card" style="display: none;"></div>
+    </div>
+<script src="js/habits.js"></script>
