@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import crud, models, schemas, security, dependencies
 from .database import engine
 from .schemas import HabitCreate
-
+from typing import List
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
@@ -50,3 +50,7 @@ def read_users_me(current_user: models.User = Depends(dependencies.get_current_u
 @app.post("/habits/",response_model=schemas.Habit)
 def create_habit(habit: HabitCreate, db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
     return crud.create_habit(db=db,user_id=current_user.id,habit=habit)
+
+@app.get("/habits/", response_model=List[schemas.Habit])
+def get_habits(db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
+    return crud.get_habits(db=db,user_id=current_user.id)
