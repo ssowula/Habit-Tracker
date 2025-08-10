@@ -10,6 +10,7 @@ const allHabitsContainer = document.getElementById('habits-list');
 const todayHabitsContainer = document.getElementById('habits-today-list');
 const todayDateSpan = document.getElementById('current-date');
 const noHabitsMessage = document.getElementById('no-habits-message');
+const completeHabitsBtn = document.getElementById('complete-habits-btn');
 
 function getTokenOrRedirect() {
     const token = localStorage.getItem('accessToken');
@@ -30,6 +31,11 @@ async function getHabitsFromAPI(endpointUrl) {
             method: "GET",
             headers: { 'Authorization': `Bearer ${token}` }
         });
+
+        if (res.status === 401) {
+            logout();
+            return [];
+        }
         if (!res.ok) {
             console.error("Błąd odpowiedzi API: ", await res.text());
             return [];
@@ -79,6 +85,7 @@ function renderHabitsList(habits) {
             todayHabitsContainer.appendChild(listItem);
         });
     }
+    updateCompleteButtonVisibility();
 }
 
 function toggleView() {
@@ -87,6 +94,12 @@ function toggleView() {
         registerView.style.display = registerView.style.display === 'none' ? 'block' : 'none';
     }
     if (responseDiv) responseDiv.innerText = '';
+}
+
+function updateCompleteButtonVisibility() {
+    if (!todayHabitsContainer || !completeHabitsBtn) return;
+    const checkedCheckboxes = todayHabitsContainer.querySelectorAll('input[type="checkbox"]:checked:not(:disabled)');
+    completeHabitsBtn.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
 }
 
 async function getProfile() {
@@ -114,7 +127,7 @@ async function getProfile() {
 
 function logout() {
     localStorage.removeItem('accessToken');
-    window.location.href = 'index.html';
+    window.location.href = '/index.html';
 }
 
 function goToHabitsDashboard() {
@@ -126,7 +139,7 @@ function goToHabitsToday() {
 }
 
 if (registerForm) {
-    registerForm.addEventListener('submit', async function(event) {
+    registerForm.addEventListener('submit', async(event) => {
         event.preventDefault();
         const username = document.getElementById('registerUsername').value;
         const password = document.getElementById('registerPassword').value;
@@ -152,7 +165,7 @@ if (registerForm) {
 }
 
 if (loginForm) {
-    loginForm.addEventListener('submit', async function(event) {
+    loginForm.addEventListener('submit', async(event) => {
         event.preventDefault();
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
@@ -185,7 +198,7 @@ if (loginForm) {
 }
 
 if (addHabitForm) {
-    addHabitForm.addEventListener('submit', async function(event) {
+    addHabitForm.addEventListener('submit', async(event) => {
         event.preventDefault();
         const name = document.getElementById('habitName').value;
         const frequency = document.getElementById('habitFrequency').value;
@@ -220,7 +233,42 @@ if (addHabitForm) {
     });
 }
 
-document.addEventListener('click', function(event) {
+if (completeHabitsBtn) {
+    completeHabitsBtn.addEventListener('click', async() => {
+        const checkedCheckboxes = todayHabitsContainer.querySelectorAll('input[type="checkbox"]:checked:not(:disabled)');
+        const token = getTokenOrRedirect();
+        if (!token || checkedCheckboxes.length === 0) return;
+
+        const completionPromises = Array.from(checkedCheckboxes).map(checkbox => {
+            const habitId = checkbox.closest('li').dataset.habitId;
+            return fetch(`${apiBaseUrl}/completions/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ habit_id: parseInt(habitId) })
+            });
+        });
+
+        try {
+            const responses = await Promise.all(completionPromises);
+            const allOk = responses.every(res => res.ok);
+
+            if (allOk) {
+                checkedCheckboxes.forEach(checkbox => checkbox.disabled = true);
+                updateCompleteButtonVisibility();
+            } else {
+                alert('Wystąpił błąd podczas zapisywania niektórych nawyków.');
+            }
+        } catch (error) {
+            console.error("Błąd wysyłania danych:", error);
+            alert("Błąd połączenia z serwerem.");
+        }
+    });
+}
+
+document.addEventListener('click', (event) => {
     const target = event.target;
     if (target.classList.contains('checked_habit')) {
         const habitId = target.dataset.habitId;
@@ -230,14 +278,13 @@ document.addEventListener('click', function(event) {
     if (target.classList.contains('today_checkbox')) {
         const listItem = target.closest('li');
         if (listItem) {
-            const habitId = listItem.dataset.habitId;
             listItem.classList.toggle('done', target.checked);
-            console.log(`Zaznaczono nawyk (lista na dziś) o ID: ${habitId}, status: ${target.checked}`);
+            updateCompleteButtonVisibility();
         }
     }
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async() => {
     const token = localStorage.getItem('accessToken');
     if (token && loginView) {
         loginView.style.display = 'none';
@@ -255,7 +302,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (todayDateSpan) {
             todayDateSpan.textContent = new Date().toLocaleDateString('pl-PL', { dateStyle: 'long' });
         }
-        const todaysHabits = await getHabitsFromAPI('/habits/today');
-        renderHabitsList(todaysHabits);
+        const todayHabits = await getHabitsFromAPI('/habits/today');
+        renderHabitsList(todayHabits);
     }
 });
