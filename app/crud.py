@@ -24,3 +24,10 @@ def create_habit(db: Session, habit: schemas.HabitCreate, user_id: int):
 
 def get_habits(db: Session, user_id: int):
     return db.query(models.Habit).filter(models.Habit.user_id == user_id).all()
+
+def create_habit_completion(db: Session, habit_id: int):
+    db_completion = models.HabitCompletion(habit_id=habit_id)
+    db.add(db_completion)
+    db.commit()
+    db.refresh(db_completion)
+    return db_completion
