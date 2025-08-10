@@ -29,3 +29,6 @@ class Habit(HabitBase):
 
     class Config:
         from_attributes = True
+
+class HabitCompletionCreate(BaseModel):
+    habit_id: int
