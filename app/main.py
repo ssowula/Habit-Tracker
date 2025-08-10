@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -54,3 +56,22 @@ def create_habit(habit: HabitCreate, db: Session = Depends(dependencies.get_db),
 @app.get("/habits/", response_model=List[schemas.Habit])
 def get_habits(db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
     return crud.get_habits(db=db,user_id=current_user.id)
+
+@app.get("/habits/today", response_model=List[schemas.Habit])
+def get_habits_for_today(db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
+    all_habits = crud.get_habits(db=db,user_id=current_user.id)
+    today=date.today()
+    habits_today = []
+    for habit in all_habits:
+        if habit.frequency == 'codziennie':
+            habits_today.append(habit)
+            continue
+        if habit.frequency == 'co tydzien':
+            if habit.created_at.weekday()==today.weekday():
+                habits_today.append(habit)
+                continue
+        if habit.frequency == 'co miesiac':
+            if habit.created_at.day == today.day:
+                habits_today.append(habit)
+                continue
+    return habits_today
