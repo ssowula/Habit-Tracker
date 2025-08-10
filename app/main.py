@@ -57,7 +57,7 @@ def create_habit(habit: HabitCreate, db: Session = Depends(dependencies.get_db),
 def get_habits(db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
     return crud.get_habits(db=db,user_id=current_user.id)
 
-@app.get("/habits/today", response_model=List[schemas.Habit])
+@app.get("/habits/today/", response_model=List[schemas.Habit])
 def get_habits_for_today(db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
     all_habits = crud.get_habits(db=db,user_id=current_user.id)
     today=date.today()
@@ -75,3 +75,12 @@ def get_habits_for_today(db: Session = Depends(dependencies.get_db), current_use
                 habits_today.append(habit)
                 continue
     return habits_today
+
+@app.post("/completions/")
+def mark_habit_as_completed(completion: schemas.HabitCompletionCreate, db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
+    habit = db.query(models.Habit).filter(models.Habit.id == completion.habit_id, models.Habit.user_id == current_user.id).first()
+    if not habit:
+        raise HTTPException(status_code=404, detail="Habit not found or does not belong to user")
+
+    crud.create_habit_completion(db=db, habit_id=completion.habit_id)
+    return {"message": f"Habit {completion.habit_id} marked as completed for today."}
