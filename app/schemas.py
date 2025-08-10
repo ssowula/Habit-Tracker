@@ -25,7 +25,7 @@ class HabitCreate(HabitBase):
 class Habit(HabitBase):
     id: int
     created_at: datetime
-    owner_id: int
+    user_id: int
 
     class Config:
         from_attributes = True

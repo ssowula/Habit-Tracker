@@ -20,7 +20,7 @@ class Habit(Base):
     frequency = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="habits")
     completions = relationship("HabitCompletion", back_populates="habit")
 
