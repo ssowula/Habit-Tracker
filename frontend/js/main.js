@@ -1,75 +1,4 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habit Tracker</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: flex-start; }
-        .container { max-width: 400px; width: 100%; }
-        .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
-        h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        button:hover { background-color: #0056b3; }
-        #auth-section, #habits-section { display: none; }
-        #response { margin-top: 15px; padding: 10px; border-radius: 6px; background-color: #e9ecef; word-wrap: break-word; display: none;}
-        .toggle-link { text-align: center; margin-top: 15px; }
-        .toggle-link a { color: #007bff; cursor: pointer; text-decoration: underline; }
-
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div id="login-view" class="card">
-            <h2>Logowanie</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginUsername">Nazwa użytkownika</label>
-                    <input type="text" id="loginUsername" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Hasło</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit">Zaloguj</button>
-            </form>
-            <div class="toggle-link">
-                Nie masz konta? <a onclick="toggleView()">Zarejestruj się</a>
-            </div>
-        </div>
-
-        <div id="register-view" class="card" style="display: none;">
-            <h2>Rejestracja</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="registerUsername">Nazwa użytkownika</label>
-                    <input type="text" id="registerUsername" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Hasło</label>
-                    <input type="password" id="registerPassword" required>
-                </div>
-                <button type="submit">Zarejestruj</button>
-            </form>
-            <div class="toggle-link">
-                Masz już konto? <a onclick="toggleView()">Zaloguj się</a>
-            </div>
-        </div>
-
-        <div id="auth-section" class="card">
-            <h2>Zalogowano!</h2>
-            <button onclick="getProfile()">Pokaż moje dane</button>
-            <button onclick="logout()">Wyloguj</button>
-        </div>
-
-        <div id="response" class="card"></div>
-    </div>
-<script>
-    const loginView = document.getElementById('login-view');
+const loginView = document.getElementById('login-view');
     const registerView = document.getElementById('register-view');
     const authSection = document.getElementById('auth-section');
     const responseDiv = document.getElementById('response');
@@ -172,4 +101,3 @@
         responseDiv.style.display='block';
         responseDiv.innerText = 'Wylogowano.';
     }
-</script>
