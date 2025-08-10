@@ -117,3 +117,10 @@ button:hover {
     background-color: #e9ecef;
     word-wrap: break-word;
 }
+#auth-section button {
+    margin-bottom: 15px;
+}
+
+#auth-section button:last-child {
+    margin-bottom: 0;
+}
