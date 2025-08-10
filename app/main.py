@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from . import crud, models, schemas, security, dependencies
 from .database import engine
+from .schemas import HabitCreate
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -45,3 +46,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 @app.get("/users/me", response_model=schemas.User)
 def read_users_me(current_user: models.User = Depends(dependencies.get_current_user)):
     return current_user
+
+@app.post("/habits/",response_model=schemas.Habit)
+def create_habit(habit: HabitCreate, db: Session = Depends(dependencies.get_db), current_user: models.User = Depends(dependencies.get_current_user)):
+    return crud.create_habit(db=db,user_id=current_user.id,habit=habit)
