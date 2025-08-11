@@ -32,3 +32,6 @@ class Habit(HabitBase):
 
 class HabitCompletionCreate(BaseModel):
     habit_id: int
+
+class HabitWithCompletionStatus(Habit):
+    is_completed: bool
