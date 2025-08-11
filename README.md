@@ -11,7 +11,7 @@ Projekt powstał jako **portfolio** demonstrujące umiejętności w zakresie bac
 - 🔐 **Autoryzacja JWT** – tokeny z określonym czasem ważności  
 - 📝 **Zarządzanie nawykami** – dodawanie codziennych, tygodniowych i miesięcznych nawyków  
 - 📅 **Lista *Na dziś*** – automatyczne generowanie zadań na bieżący dzień  
-- ✔️ **Oznaczanie ukończonych nawyków** – zapis w bazie danych na potrzeby statystyk  
+- ✔️ **Oznaczanie ukończonych nawyków** – zapis w bazie danych na potrzeby przyszłych statystyk  
 - 🚀 **Zintegrowany backend + frontend** – brak problemów z CORS, uruchamiane jedną komendą
 
 ---
